@@ -56,7 +56,7 @@ export async function SubmissionStep({ offeringId, user, ws }: StepProps) {
                 {h.history.map((x) => (
                   <tr key={x.id}>
                     <Td className="text-xs text-muted whitespace-nowrap">{fmtDate(x.created_at)}</Td>
-                    <Td><Badge tone={x.action === "RETURN" ? "amber" : x.action.startsWith("APPROVE") || x.action === "LOCK" ? "green" : "violet"}>{human(x.action)}</Badge>{x.stage && <span className="ml-1 text-[11px] text-muted">{human(x.stage)}</span>}</Td>
+                    <Td><Badge tone={x.action === "RETURN" ? "amber" : x.action.startsWith("APPROVE") || x.action === "LOCK" ? "green" : "violet"}>{human(x.action)}</Badge>{x.stage && <span className="ml-1 text-[11px] text-muted">{["SUBMIT", "RESUBMIT"].includes(x.action) ? "to " : ""}{human(x.stage)}</span>}</Td>
                     <Td className="text-xs">{human(x.from_status)} → {human(x.to_status)} <span className="text-muted">v{x.version}</span></Td>
                     <Td>{x.actor_name} <span className="text-[11px] text-muted">{human(x.actor_role)}</span></Td>
                     <Td className="text-ink-2">{x.comments}</Td>

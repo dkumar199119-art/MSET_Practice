@@ -86,14 +86,14 @@ export function summarize(rows: OfferingOverview[]) {
 export function programOutcomeSummary(actor: Actor, academicYearId?: string) {
   return tx(actor, async (db) => {
     const po = await db.query<{ program_id: string; program_code: string; kind: string; code: string; value_pct: number | null; target_pct: number; gap: number | null; status: string }>(`
-      select p.id program_id, p.code program_code, 'PO' kind, o.code, a.value_pct, a.target_pct, a.gap, a.status
+      select p.id program_id, p.code program_code, 'PO' kind, o.code, a.value_pct, a.target_pct, a.gap, a.status, o.sort_order
       from po_attainment a join program_outcomes o on o.id = a.po_id join programs p on p.id = a.program_id
       where a.is_current and ($1::uuid is null or a.academic_year_id = $1)
       union all
-      select p.id, p.code, 'PSO', o.code, a.value_pct, a.target_pct, a.gap, a.status
+      select p.id, p.code, 'PSO', o.code, a.value_pct, a.target_pct, a.gap, a.status, o.sort_order
       from pso_attainment a join program_specific_outcomes o on o.id = a.pso_id join programs p on p.id = a.program_id
       where a.is_current and ($1::uuid is null or a.academic_year_id = $1)
-      order by 2, 3, 4`, [academicYearId ?? null]);
+      order by 2, 3, 9, 4`, [academicYearId ?? null]);
     const actionPlans = await db.query<{ status: string; n: number; overdue: number }>(`
       select status, count(*)::int n, count(*) filter (where target_date < current_date and status not in ('CLOSED','REVIEWED','IMPLEMENTED'))::int overdue
       from action_plans group by status`);

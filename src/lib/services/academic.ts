@@ -328,7 +328,7 @@ export function listStaff(actor: Actor, departmentId?: string | null) {
 export function listCalendar(actor: Actor) {
   return tx(actor, async (db) => ({
     years: await db.query<{ id: string; name: string; is_current: boolean }>("select id, name, is_current from academic_years order by start_date desc"),
-    semesters: await db.query<{ id: string; name: string; academic_year_id: string; term: string }>("select id, name, academic_year_id, term from semesters order by name"),
+    semesters: await db.query<{ id: string; name: string; academic_year_id: string; term: string }>("select id, name, academic_year_id, term from semesters order by case term when 'ODD' then 1 when 'EVEN' then 2 else 3 end, name"),
     batches: await db.query<{ id: string; name: string; department_id: string | null; program_id: string | null }>("select id, name, department_id, program_id from batches order by start_year desc"),
   }));
 }

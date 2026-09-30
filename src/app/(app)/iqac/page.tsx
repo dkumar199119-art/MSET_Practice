@@ -54,7 +54,7 @@ export default async function Iqac({ searchParams }: { searchParams: Promise<Rec
           </form>
         </CardBody>
       </Card>
-      <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
         <Stat label="Programs" value={s.programs} sub={`${counts.programs} in institution`} />
         <Stat label="Courses offered" value={s.offerings} sub={`${s.courses} distinct courses`} />
         <Stat label="Faculty teaching" value={counts.faculty} />
